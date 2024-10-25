@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Your Productivity Type</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #e0f7fa; /* Light teal background */
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .question, #email-section, #result, #loading {
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .question label {
+            display: block;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+        .question input[type="radio"] {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #00796b; /* Dark teal for buttons */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004d40; /* Slightly darker on hover */
+        }
+        .results {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        #link-to-newsletter {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h2>Discover Your Productivity Type!</h2>
+
+    <div id="quiz">
+        <!-- 5 Questions -->
+        <div class="question">
+            <p><strong>1. How do you feel about structured routines?</strong></p>
+            <label><input type="radio" name="q1" value="a"> I thrive on them and stick to my schedule.</label>
+            <label><input type="radio" name="q1" value="b"> I like flexibility and big-picture thinking.</label>
+            <label><input type="radio" name="q1" value="c"> I prefer my own methods and independence.</label>
+            <label><input type="radio" name="q1" value="d"> I like collaborative schedules and teamwork.</label>
+        </div>
+
+        <div class="question">
+            <p><strong>2. What motivates you to complete tasks?</strong></p>
+            <label><input type="radio" name="q2" value="e"> Seeing progress boosts my confidence.</label>
+            <label><input type="radio" name="q2" value="a"> Tracking time and hitting deadlines.</label>
+            <label><input type="radio" name="q2" value="g"> Analyzing data and improving based on results.</label>
+            <label><input type="radio" name="q2" value="f"> Critiquing and refining tasks for perfection.</label>
+        </div>
+
+        <div class="question">
+            <p><strong>3. How do you handle feedback?</strong></p>
+            <label><input type="radio" name="q3" value="h"> I use feedback to fuel creativity.</label>
+            <label><input type="radio" name="q3" value="f"> I focus on constructive criticism.</label>
+            <label><input type="radio" name="q3" value="e"> Positive feedback boosts my confidence.</label>
+            <label><input type="radio" name="q3" value="g"> Detailed data helps me adjust and improve.</label>
+        </div>
+
+        <div class="question">
+            <p><strong>4. What tools do you prefer to stay organized?</strong></p>
+            <label><input type="radio" name="q4" value="c"> I prefer solo projects and flexible tools.</label>
+            <label><input type="radio" name="q4" value="a"> Time-tracking apps and calendars.</label>
+            <label><input type="radio" name="q4" value="d"> Collaborative apps for teamwork.</label>
+            <label><input type="radio" name="q4" value="h"> Creative brainstorming tools.</label>
+        </div>
+
+        <div class="question">
+            <p><strong>5. What is your biggest challenge in staying productive?</strong></p>
+            <label><input type="radio" name="q5" value="b"> Following through on small tasks.</label>
+            <label><input type="radio" name="q5" value="c"> Working within rigid structures.</label>
+            <label><input type="radio" name="q5" value="f"> Not being able to fix flaws quickly.</label>
+            <label><input type="radio" name="q5" value="g"> Working without clear data or results.</label>
+        </div>
+
+        <button onclick="showEmailSection()">Submit Quiz</button>
+    </div>
+
+    <div id="email-section" style="display: none;">
+        <p>Please enter your email to see your results:</p>
+        <input type="email" id="email" placeholder="Enter your email" required>
+        <button onclick="submitEmail()">Submit Email</button>
+    </div>
+
+    <div id="loading" class="results">Loading... Please wait while we verify your email.</div>
+
+    <div id="result" class="results" style="display: none;"></div>
+
+    <script>
+        let quizResult = '';
+        let responses = [];
+
+        function showEmailSection() {
+            const answers = { a: 0, b: 0, c: 0, d: 0, e: 0, f: 0, g: 0, h: 0 };
+            for (let i = 1; i <= 5; i++) {
+                const question = document.querySelector(`input[name="q${i}"]:checked`);
+                if (question) {
+                    answers[question.value]++;
+                    responses.push({ question: i, answer: question.value });
+                }
+            }
+            
+            const max = Math.max(...Object.values(answers));
+            const result = Object.keys(answers).find(key => answers[key] === max);
+
+            const productivityTypes = {
+                a: "The Time Tracker: Use time-tracking tools, set clear daily goals, and time-block your calendar.",
+                b: "The Dreamer: Break big goals into smaller tasks, use vision boards, and review your weekly progress.",
+                c: "The Individualist: Create personal milestones, use independent project tools, and allow flexibility in your schedule.",
+                d: "The Collaborator: Engage in collaborative platforms, set up check-ins, and work with co-working groups.",
+                e: "The Confidence Booster: Use affirmations, track small wins, and reflect on past accomplishments for motivation.",
+                f: "The Critic: Set review periods, use checklists for feedback, and work on improving one area at a time.",
+                g: "The Analyst: Use data-driven apps, establish KPIs, and track analytics to fine-tune your strategies.",
+                h: "The Creative: Schedule creative sessions, build inspiration boards, and keep a flexible workspace."
+            };
+
+            quizResult = `
+                <p>Your productivity type is: <strong>${productivityTypes[result]}</strong></p>
+                <p>Check out <a id="link-to-newsletter" href="https://seldaseyfi.substack.com/${result}">more tips for your productivity type</a> and improve your work!</p>
+            `;
+            document.getElementById("quiz").style.display = "none";
+            document.getElementById("email-section").style.display = "block";
+        }
+
+        function submitEmail() {
+            const email = document.getElementById("email").value;
+            if (email) {
+                // ConvertKit API Configuration
+                const apiKey = 'LKxi1tuY7exEaYeZZyqrxA';
+                const formId = '7282297';
+
+                // ConvertKit API Endpoint
+                const url = `https://api.convertkit.com/v3/forms/${formId}/subscribe`;
+
+                // Data to send
+                const data = {
+                    api_key: apiKey,
+                    email: email
+                };
+
+                // Show loading state
+                document.getElementById("loading").style.display = "block";
+                document.getElementById("email-section").style.display = "none";
+
+                // Send POST request to ConvertKit
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(responseData => {
+                    if (responseData.subscription) {
+                        logResponses(email);  // Log responses once email is confirmed
+                        document.getElementById("loading").style.display = "none";
+                        document.getElementById("result").innerHTML = quizResult;
+                        document.getElementById("result").style.display = "block";
+                    } else {
+                        alert("Please confirm your email to get the results.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("There was an error. Please try again.");
+                });
+            } else {
+                alert("Please enter a valid email.");
+            }
+        }
+
+        // Function to log responses (in this case, it stores in local storage)
+        function logResponses(email) {
+            const userResponses = { email: email, answers: responses };
+            console.log(userResponses);
+            // Ideally, send these responses to a backend or Google Sheets for analysis
+            localStorage.setItem('quizResponses', JSON.stringify(userResponses));  // Temporary logging in local storage
+        }
+    </script>
+</body>
+</html>
+
